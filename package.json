@@ -1,6 +1,6 @@
 {
   "name": "react-bottom-lock",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sticky bottom scrolling for React chat and streaming UIs.",
   "keywords": [
     "chat",
