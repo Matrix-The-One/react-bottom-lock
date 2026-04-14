@@ -10,7 +10,7 @@
 pnpm add react-bottom-lock
 ```
 
-## 接入
+## 使用
 
 ### 普通滚动容器
 
@@ -35,12 +35,12 @@ import { Virtuoso } from 'react-virtuoso';
 import { useVirtualStickToBottom } from 'react-bottom-lock';
 
 function Timeline({ items }: { items: string[] }) {
-  const { scrollerRef, notifyContentHeight } = useVirtualStickToBottom();
+  const { scrollRef, notifyContentHeight } = useVirtualStickToBottom();
 
   return (
     <Virtuoso
       data={items}
-      scrollerRef={scrollerRef}
+      scrollerRef={scrollRef}
       totalListHeightChanged={notifyContentHeight}
       followOutput={false}
       itemContent={(index, item) => <div>{item}</div>}
@@ -169,7 +169,7 @@ function Timeline({ items }: { items: string[] }) {
 | --- | --- | --- | --- |
 | `bottomOffset` | `number` | `70` | 距离底部多少像素内仍视为“接近底部”。 |
 | `initial` | `StickToBottomAnimation \| boolean` | `true` | 首次测量时是否自动吸底，以及使用哪种动画。传 `false` 可关闭首次自动吸底。 |
-| `resize` | `StickToBottomAnimation` | 跟随默认弹簧配置 | 内容高度继续增长时，自动追底所使用的动画。 |
+| `resize` | `StickToBottomAnimation` | `undefined` | 内容高度继续增长时，自动追底所使用的动画。未传时会合并当前配置，最终回退到默认弹簧配置。 |
 | `retainAnimationMs` | `number` | `350` | 自动追底后的保留时长，避免异步布局抖动过早结束滚动。 |
 | `fallbackPollInterval` | `number \| false` | `false` | 备用轮询间隔，适合接入某些不会可靠触发 `ResizeObserver` 的场景。 |
 | `targetScrollTop` | `(targetScrollTop: number, context: ScrollContext) => number` | `undefined` | 自定义最终目标 `scrollTop`，返回值会被自动夹在合法滚动范围内。 |
@@ -178,7 +178,7 @@ function Timeline({ items }: { items: string[] }) {
 
 | 返回值 | 类型 | 说明 |
 | --- | --- | --- |
-| `scrollRef` / `scrollerRef` | `RefCallback<HTMLElement \| null>` | 绑定滚动容器。两个名字等价，按你的项目习惯选一个即可。 |
+| `scrollRef` | `RefCallback<HTMLElement \| null>` | 绑定滚动容器。 |
 | `contentRef` | `RefCallback<HTMLElement \| null>` | 绑定内容容器，用于监听内容高度变化。 |
 | `notifyContentHeight` | `(height: number) => void` | 当外部已知内容高度变化、但 DOM 还没法稳定测到时，可手动通知。 |
 | `measure` | `() => void` | 主动触发一次重新测量。 |
@@ -194,7 +194,7 @@ function Timeline({ items }: { items: string[] }) {
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `animation` | `StickToBottomAnimation` | 继承 Hook 默认配置 | 本次滚动使用的动画。 |
+| `animation` | `StickToBottomAnimation` | `undefined` | 本次滚动使用的动画。未传时会沿用 Hook 当前配置。 |
 | `wait` | `boolean \| number` | `false` | 传 `true` 会等到下一帧再开始；传数字则表示等待对应毫秒数。 |
 | `ignoreEscapes` | `boolean` | `false` | 滚动过程中是否忽略用户脱离锁定的动作。 |
 | `preserveScrollPosition` | `boolean` | `false` | 是否尽量保留当前滚动意图，而不是立刻重置为吸底或脱离状态。 |
@@ -204,7 +204,7 @@ function Timeline({ items }: { items: string[] }) {
 
 | 返回值 | 类型 | 说明 |
 | --- | --- | --- |
-| `scrollerRef` | `RefCallback<HTMLElement \| Window \| null>` | 绑定虚拟列表暴露出的滚动容器引用。支持元素滚动和 `Window` 级滚动。 |
+| `scrollRef` | `RefCallback<HTMLElement \| Window \| null>` | 绑定虚拟列表暴露出的滚动容器引用。支持元素滚动和 `Window` 级滚动。 |
 | `notifyContentHeight` | `(height: number) => void` | 当虚拟列表总高度变化时通知 Hook，可直接绑定给对应库的总高度回调。 |
 
 ## 示例

@@ -26,7 +26,7 @@ export function VirtuosoExample({ locale }: ExampleProps) {
   const copy = getUiCopy(locale);
   const {
     contentRef,
-    scrollerRef,
+    scrollRef,
     notifyContentHeight,
     scrollToTop,
     scrollToBottom,
@@ -89,7 +89,7 @@ export function VirtuosoExample({ locale }: ExampleProps) {
         data={messages}
         components={components}
         increaseViewportBy={{ top: 4000, bottom: 4000 }}
-        scrollerRef={scrollerRef}
+        scrollerRef={scrollRef}
         totalListHeightChanged={notifyContentHeight}
         followOutput={false}
         computeItemKey={(_, message) => message.id}

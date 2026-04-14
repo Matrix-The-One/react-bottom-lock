@@ -460,7 +460,6 @@ export function useStickToBottom(options: StickToBottomOptions = {}): StickToBot
 
   return {
     scrollRef: attachScrollElement,
-    scrollerRef: attachScrollElement,
     contentRef,
     notifyContentHeight,
     measure,

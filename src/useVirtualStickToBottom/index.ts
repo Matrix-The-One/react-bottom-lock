@@ -7,8 +7,8 @@ const DEFAULT_VIRTUAL_FALLBACK_POLL_INTERVAL = 80;
 
 export type VirtualStickToBottomOptions = StickToBottomOptions;
 
-export interface VirtualStickToBottomResult extends Omit<StickToBottomResult, "scrollerRef"> {
-  scrollerRef: RefCallback<HTMLElement | Window | null>;
+export interface VirtualStickToBottomResult extends Omit<StickToBottomResult, "scrollRef"> {
+  scrollRef: RefCallback<HTMLElement | Window | null>;
 }
 
 export function useVirtualStickToBottom(
@@ -18,12 +18,12 @@ export function useVirtualStickToBottom(
     ...options,
     fallbackPollInterval: options.fallbackPollInterval ?? DEFAULT_VIRTUAL_FALLBACK_POLL_INTERVAL,
   });
-  const { notifyContentHeight, scrollerRef: attachScrollerRef, ...rest } = stickyBottom;
+  const { notifyContentHeight, scrollRef: attachScrollRef, ...rest } = stickyBottom;
 
-  const scrollerRef = useCallback<RefCallback<HTMLElement | Window | null>>(
+  const scrollRef = useCallback<RefCallback<HTMLElement | Window | null>>(
     (element) => {
       if (element instanceof HTMLElement) {
-        attachScrollerRef(element);
+        attachScrollRef(element);
         return;
       }
 
@@ -31,7 +31,7 @@ export function useVirtualStickToBottom(
         // Some virtualizers can hand us Window for page-level scrolling; use
         // the document's scrolling element so the core hook can stay
         // element-based internally.
-        attachScrollerRef(
+        attachScrollRef(
           element.document.scrollingElement instanceof HTMLElement
             ? element.document.scrollingElement
             : null,
@@ -39,14 +39,14 @@ export function useVirtualStickToBottom(
         return;
       }
 
-      attachScrollerRef(null);
+      attachScrollRef(null);
     },
-    [attachScrollerRef],
+    [attachScrollRef],
   );
 
   return {
     ...rest,
     notifyContentHeight,
-    scrollerRef,
+    scrollRef,
   };
 }

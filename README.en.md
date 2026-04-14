@@ -10,7 +10,7 @@ Sticky bottom scrolling for React chat and streaming UIs.
 pnpm add react-bottom-lock
 ```
 
-## Integration
+## Usage
 
 ### Regular scroll container
 
@@ -35,12 +35,12 @@ import { Virtuoso } from 'react-virtuoso';
 import { useVirtualStickToBottom } from 'react-bottom-lock';
 
 function Timeline({ items }: { items: string[] }) {
-  const { scrollerRef, notifyContentHeight } = useVirtualStickToBottom();
+  const { scrollRef, notifyContentHeight } = useVirtualStickToBottom();
 
   return (
     <Virtuoso
       data={items}
-      scrollerRef={scrollerRef}
+      scrollerRef={scrollRef}
       totalListHeightChanged={notifyContentHeight}
       followOutput={false}
       itemContent={(index, item) => <div>{item}</div>}
@@ -169,7 +169,7 @@ function Timeline({ items }: { items: string[] }) {
 | --- | --- | --- | --- |
 | `bottomOffset` | `number` | `70` | How close to the bottom still counts as “near bottom”. |
 | `initial` | `StickToBottomAnimation \| boolean` | `true` | Whether the first measurement should auto-lock to the bottom, and which animation to use. Pass `false` to disable the initial auto-follow. |
-| `resize` | `StickToBottomAnimation` | falls back to the default spring config | Animation used when content keeps growing and the hook is still following the bottom. |
+| `resize` | `StickToBottomAnimation` | `undefined` | Animation used when content keeps growing and the hook is still following the bottom. When omitted, it is merged with the current config and ultimately falls back to the default spring config. |
 | `retainAnimationMs` | `number` | `350` | How long to retain the animation state after auto-following, which helps absorb async layout settling. |
 | `fallbackPollInterval` | `number \| false` | `false` | Optional polling interval for environments where `ResizeObserver` is not reliable enough on its own. |
 | `targetScrollTop` | `(targetScrollTop: number, context: ScrollContext) => number` | `undefined` | Override the final target `scrollTop`. The return value is clamped to the valid scroll range. |
@@ -178,7 +178,7 @@ function Timeline({ items }: { items: string[] }) {
 
 | Return value | Type | Description |
 | --- | --- | --- |
-| `scrollRef` / `scrollerRef` | `RefCallback<HTMLElement \| null>` | Bind the scroll container. Both names are equivalent. |
+| `scrollRef` | `RefCallback<HTMLElement \| null>` | Bind the scroll container. |
 | `contentRef` | `RefCallback<HTMLElement \| null>` | Bind the content container so the hook can observe height changes. |
 | `notifyContentHeight` | `(height: number) => void` | Manually report a content height update when external systems know it before DOM measurement fully settles. |
 | `measure` | `() => void` | Trigger a manual re-measurement. |
@@ -194,7 +194,7 @@ function Timeline({ items }: { items: string[] }) {
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `animation` | `StickToBottomAnimation` | inherits the hook defaults | Animation used for this specific scroll request. |
+| `animation` | `StickToBottomAnimation` | `undefined` | Animation used for this specific scroll request. When omitted, the hook's current config is used. |
 | `wait` | `boolean \| number` | `false` | Pass `true` to wait until the next frame, or a number to wait that many milliseconds before starting. |
 | `ignoreEscapes` | `boolean` | `false` | Whether this scroll should ignore user escape actions while it is running. |
 | `preserveScrollPosition` | `boolean` | `false` | Try to preserve the current scroll intent instead of immediately resetting to a bottom-locking state. |
@@ -204,7 +204,7 @@ function Timeline({ items }: { items: string[] }) {
 
 | Return value | Type | Description |
 | --- | --- | --- |
-| `scrollerRef` | `RefCallback<HTMLElement \| Window \| null>` | Bind this to the virtual list's exposed scroller ref. Supports both element scrolling and `Window` scrolling. |
+| `scrollRef` | `RefCallback<HTMLElement \| Window \| null>` | Bind this to the virtual list's exposed scroller ref. Supports both element scrolling and `Window` scrolling. |
 | `notifyContentHeight` | `(height: number) => void` | Notify the hook when total virtualized content height changes. |
 
 ## Example

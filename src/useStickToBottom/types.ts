@@ -59,7 +59,6 @@ export interface StickToBottomState {
 
 export interface StickToBottomResult {
   scrollRef: RefCallback<HTMLElement | null>;
-  scrollerRef: RefCallback<HTMLElement | null>;
   contentRef: RefCallback<HTMLElement | null>;
   notifyContentHeight: (height: number) => void;
   measure: () => void;
