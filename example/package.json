@@ -1,0 +1,43 @@
+{
+  "name": "react-bottom-lock-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "predev": "pnpm --dir .. build",
+    "dev": "vp dev",
+    "prebuild": "pnpm --dir .. build",
+    "build": "vp build",
+    "preview": "vp preview",
+    "lint": "vp lint",
+    "precheck": "pnpm --dir .. build",
+    "check": "pnpm lint && tsc --noEmit -p tsconfig.json",
+    "pretest": "pnpm --dir .. build",
+    "test": "playwright test",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@tanstack/react-virtual": "^3.13.23",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.8.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-bottom-lock": "workspace:*",
+    "react-virtuoso": "^4.18.4",
+    "react-window": "^2.2.7",
+    "streamdown": "2.5.0",
+    "tailwind-merge": "^3.5.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/node": "^25.6.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "tailwindcss": "^4.2.2",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.8",
+    "vite-plus": "^0.1.16"
+  }
+}

@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate package
+        run: pnpm check
+
+      - name: Read package name
+        id: package
+        shell: bash
+        run: echo "name=$(node -p "require('./package.json').name")" >> "$GITHUB_OUTPUT"
+
+      - name: Check whether the package already exists on npm
+        id: npm_package
+        shell: bash
+        run: |
+          if npm view "${{ steps.package.outputs.name }}" version >/dev/null 2>&1; then
+            echo "bootstrap=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "bootstrap=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create or update release pull request
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm version-packages
+          title: "chore: 发布版本"
+          commit: "chore: 发布版本"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Require NPM token for the first publish
+        if: steps.changesets.outputs.hasChangesets == 'false' && steps.npm_package.outputs.bootstrap == 'true' && secrets.NPM_TOKEN == ''
+        shell: bash
+        run: |
+          echo "The package is not published on npm yet. Add repository secret NPM_TOKEN for the bootstrap publish, then remove it after trusted publishing is configured." >&2
+          exit 1
+
+      - name: Configure npm token for bootstrap publish
+        if: steps.changesets.outputs.hasChangesets == 'false' && steps.npm_package.outputs.bootstrap == 'true' && secrets.NPM_TOKEN != ''
+        shell: bash
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
+
+      - name: Publish package to npm with trusted publishing
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: pnpm release
