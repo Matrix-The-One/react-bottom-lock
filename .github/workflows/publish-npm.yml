@@ -80,3 +80,54 @@ jobs:
       - name: Publish package to npm with trusted publishing
         if: steps.changesets.outputs.hasChangesets == 'false'
         run: pnpm release
+
+      - name: Read released version
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        id: released_version
+        shell: bash
+        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Create and push git tag
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        shell: bash
+        run: |
+          TAG="v${{ steps.released_version.outputs.version }}"
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists locally."
+          else
+            git tag "$TAG"
+          fi
+
+          if git ls-remote --tags origin "refs/tags/$TAG" | grep -q "$TAG"; then
+            echo "Tag $TAG already exists on origin."
+          else
+            git push origin "$TAG"
+          fi
+
+      - name: Create GitHub release
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="v${{ steps.released_version.outputs.version }}"
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists."
+            exit 0
+          fi
+
+          node - <<'NODE' > release-notes.md
+          const fs = require('fs');
+          const version = require('./package.json').version;
+          const changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
+          const escapedVersion = version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const match = changelog.match(
+            new RegExp(`## ${escapedVersion}\\n([\\s\\S]*?)(?=\\n## \\d|$)`)
+          );
+
+          process.stdout.write((match?.[1] ?? `Release ${version}`).trim() + '\n');
+          NODE
+
+          gh release create "$TAG" --title "$TAG" --notes-file release-notes.md
