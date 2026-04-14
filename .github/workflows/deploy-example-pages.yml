@@ -56,7 +56,7 @@ jobs:
             git worktree add -B gh-pages "$DEPLOY_DIR" HEAD
           fi
 
-          rsync -a --delete example/dist/ "$DEPLOY_DIR"/
+          rsync -a --delete --exclude .git example/dist/ "$DEPLOY_DIR"/
           touch "$DEPLOY_DIR/.nojekyll"
 
           cd "$DEPLOY_DIR"
