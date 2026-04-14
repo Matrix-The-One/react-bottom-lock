@@ -64,19 +64,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Require NPM token for the first publish
-        if: steps.changesets.outputs.hasChangesets == 'false' && steps.npm_package.outputs.bootstrap == 'true' && secrets.NPM_TOKEN == ''
-        shell: bash
-        run: |
-          echo "The package is not published on npm yet. Add repository secret NPM_TOKEN for the bootstrap publish, then remove it after trusted publishing is configured." >&2
-          exit 1
-
-      - name: Configure npm token for bootstrap publish
-        if: steps.changesets.outputs.hasChangesets == 'false' && steps.npm_package.outputs.bootstrap == 'true' && secrets.NPM_TOKEN != ''
+      - name: Prepare bootstrap publish token
+        if: steps.changesets.outputs.hasChangesets == 'false' && steps.npm_package.outputs.bootstrap == 'true'
         shell: bash
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
+        run: |
+          if [ -z "$NPM_TOKEN" ]; then
+            echo "The package is not published on npm yet. Add repository secret NPM_TOKEN for the bootstrap publish, then remove it after trusted publishing is configured." >&2
+            exit 1
+          fi
+
+          npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
 
       - name: Publish package to npm with trusted publishing
         if: steps.changesets.outputs.hasChangesets == 'false'
