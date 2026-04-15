@@ -34,7 +34,7 @@ const DEMO_STREAM_DELAY_MULTIPLIER = 1.25;
 const DEFAULT_TEXT_FRAME_DELAY = 72;
 const DEFAULT_PROGRESSIVE_FRAME_DELAY = 220;
 
-const LUO_RIVER_IMAGE = './images/luo-river-illustration.svg';
+const LUO_RIVER_IMAGE = `${import.meta.env.BASE_URL}images/luo-river-illustration.svg`;
 
 const SCENARIO_LABELS: Record<Locale, Record<DemoScenario, string>> = {
   en: {
