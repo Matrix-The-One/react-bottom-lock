@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @source "../node_modules/streamdown/dist/*.js";
+@source "../node_modules/@streamdown/math/dist/*.js";
+@source "../node_modules/@streamdown/mermaid/dist/*.js";
 
 :root,
 :root[data-theme='light'] {
@@ -518,6 +520,28 @@ select {
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
+}
+
+.demo-markdown :where(.katex-display) {
+  margin: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.25rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.demo-markdown :where([data-streamdown='mermaid']) {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.demo-markdown :where([data-streamdown='mermaid'] svg) {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 .demo-markdown :where(h1, h2, h3, h4) {

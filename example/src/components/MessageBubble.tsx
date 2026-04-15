@@ -1,8 +1,15 @@
 import { forwardRef } from 'react';
+import { math } from '@streamdown/math';
+import { mermaid } from '@streamdown/mermaid';
 import { Streamdown } from 'streamdown';
 import type { DemoMessage } from '../data/scenarios';
 import { getUiCopy, type Locale } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
+
+const STREAMDOWN_PLUGINS = {
+  math,
+  mermaid,
+} as const;
 
 export interface MessageBubbleProps {
   locale: Locale;
@@ -52,6 +59,7 @@ export const MessageBubble = forwardRef<HTMLElement, MessageBubbleProps>(functio
               controls={false}
               isAnimating={isStreaming}
               lineNumbers={false}
+              plugins={STREAMDOWN_PLUGINS}
             >
               {message.markdown}
             </Streamdown>
