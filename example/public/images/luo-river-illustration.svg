@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 960" role="img" aria-labelledby="title desc">
+  <title id="title">Moonlit Luo River</title>
+  <desc id="desc">An illustrated moonlit river scene with layered mountains and mist.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0f1f3c" />
+      <stop offset="55%" stop-color="#264d73" />
+      <stop offset="100%" stop-color="#5a8ca6" />
+    </linearGradient>
+    <linearGradient id="water" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#12344f" />
+      <stop offset="100%" stop-color="#6fb0bf" />
+    </linearGradient>
+    <linearGradient id="mist" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f6f3ea" stop-opacity="0.82" />
+      <stop offset="100%" stop-color="#f6f3ea" stop-opacity="0.08" />
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="28" />
+    </filter>
+  </defs>
+  <rect width="1440" height="960" rx="48" fill="url(#sky)" />
+  <circle cx="1140" cy="170" r="92" fill="#fff0c8" />
+  <circle cx="1140" cy="170" r="132" fill="#fff0c8" fill-opacity="0.2" filter="url(#glow)" />
+  <path d="M0 470C130 420 260 412 380 368C516 318 626 222 790 220C954 218 1068 324 1224 320C1314 318 1388 292 1440 272V960H0Z" fill="#13243a" fill-opacity="0.84" />
+  <path d="M0 560C150 610 262 548 418 580C574 612 664 724 860 714C1060 704 1208 568 1440 620V960H0Z" fill="url(#water)" />
+  <path d="M0 664C198 620 358 708 540 690C732 670 880 578 1068 598C1212 614 1322 694 1440 676" fill="none" stroke="#f3f0e5" stroke-linecap="round" stroke-opacity="0.24" stroke-width="12" />
+  <path d="M126 594C248 540 352 490 432 438C514 386 596 344 694 344C798 344 882 402 968 488C1044 564 1114 612 1204 612C1278 612 1342 580 1404 532" fill="none" stroke="url(#mist)" stroke-linecap="round" stroke-width="18" />
+  <path d="M214 622C258 560 320 506 396 492C402 548 418 602 454 650C376 670 286 660 214 622Z" fill="#f6f0e4" fill-opacity="0.72" />
+  <path d="M424 470C454 434 506 406 548 404C568 438 578 492 582 550C524 554 468 526 424 470Z" fill="#ffffff" fill-opacity="0.48" />
+  <path d="M860 700C962 648 1040 608 1118 560C1188 516 1252 470 1314 432" fill="none" stroke="#fff0c8" stroke-linecap="round" stroke-opacity="0.34" stroke-width="12" />
+</svg>
